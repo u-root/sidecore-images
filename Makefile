@@ -1,10 +1,10 @@
-all: sidecore-images riscv-ubuntu@latest.cpio amd64-ubuntu@latest.cpio
+all: sidecore-images riscv64-ubuntu@latest.cpio amd64-ubuntu@latest.cpio
 
 sidecore-images: main.go
 	CGO_ENABLED=0 go build .
 	rm -f *.cpio
 	
-riscv-ubuntu@latest.cpio: 
+riscv64-ubuntu@latest.cpio:
 	docker run -e PWD=/  \
 		--mount type=bind,source=/home,target=/home \
 		--entrypoint  `pwd`/sidecore-images \
@@ -13,7 +13,7 @@ riscv-ubuntu@latest.cpio:
 		-one-file-system  -e /tmp \
 		> $@
 
-amd64-ubuntu@latest.cpio: 
+amd64-ubuntu@latest.cpio:
 	docker run -e PWD=/  \
 		--mount type=bind,source=/home,target=/home \
 		--entrypoint  `pwd`/sidecore-images \
