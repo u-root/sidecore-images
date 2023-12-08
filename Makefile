@@ -1,4 +1,8 @@
-all: sidecore-images riscv64-ubuntu@latest.cpio amd64-ubuntu@latest.cpio
+all: sidecore-images \
+	riscv64-ubuntu@latest.cpio \
+	amd64-ubuntu@latest.cpio \
+	arm32v6-alpine@latest.cpio \
+	arm32v5-debian@latest.cpio \
 
 sidecore-images: main.go
 	CGO_ENABLED=0 go build .
@@ -22,3 +26,20 @@ amd64-ubuntu@latest.cpio:
 		-one-file-system  -e /tmp \
 		> $@
 
+arm32v6-alpine@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		arm32v6/alpine \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
+
+arm32v5-debian@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		arm32v5/debian \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
