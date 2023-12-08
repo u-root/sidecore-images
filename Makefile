@@ -2,7 +2,10 @@ all: sidecore-images \
 	riscv64-ubuntu@latest.cpio \
 	amd64-ubuntu@latest.cpio \
 	arm32v6-alpine@latest.cpio \
-	arm32v5-debian@latest.cpio \
+	arm32v5-debian@latest.cpio.gz \
+
+uncompress:
+	gunzip -k arm32v5-debian@latest.cpio.gz
 
 sidecore-images: main.go
 	CGO_ENABLED=0 go build .
@@ -43,3 +46,6 @@ arm32v5-debian@latest.cpio:
 		/ `pwd`/$@ \
 		-one-file-system  -e /tmp \
 		> $@
+
+arm32v5-debian@latest.cpio.gz: arm32v5-debian@latest.cpio
+	gzip -f $<
