@@ -1,8 +1,11 @@
 all: sidecore-images \
 	riscv64-ubuntu@latest.cpio \
+	riscv64-alpine@latest.cpio \
 	amd64-ubuntu@latest.cpio \
 	arm32v6-alpine@latest.cpio \
 	arm32v5-debian@latest.cpio.gz \
+	riscv64-alpine@latest.cpio.gz \
+
 
 uncompress:
 	gunzip -k arm32v5-debian@latest.cpio.gz
@@ -19,6 +22,18 @@ riscv64-ubuntu@latest.cpio:
 		/ `pwd`/$@ \
 		-one-file-system  -e /tmp \
 		> $@
+
+riscv64-alpine@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		riscv64/alpine:20230901 \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
+
+riscv64-alpine@latest.cpio.gz: riscv64-alpine@latest.cpio
+	gzip -f $<
 
 amd64-ubuntu@latest.cpio:
 	docker run -e PWD=/  \
