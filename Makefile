@@ -9,6 +9,7 @@ all: sidecore-images \
 	riscv64-alpine@latest.cpio.gz \
 	arm32v5-navikey-raspbian-buster@latest.cpio.gz \
 	arm32v7-ubuntu@latest.cpio.gz \
+	mips32le-debian@latest.cpio.gz \
 
 uncompress:
 	gunzip -f -k *.gz
@@ -101,5 +102,16 @@ arm32v5-navikey-raspbian-buster@latest.cpio:
 		-one-file-system  -e /tmp \
 		> $@
 
+mips32le-debian@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		091milan/debian:jessie \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
+
 arm32v5-navikey-raspbian-buster@latest.cpio.gz: arm32v5-navikey-raspbian-buster@latest.cpio
+	gzip -f $<
+mips32le-debian@latest.cpio.gz: mips32le-debian@latest.cpio
 	gzip -f $<
