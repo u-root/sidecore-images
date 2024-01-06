@@ -5,10 +5,10 @@ all: sidecore-images \
 	arm32v6-alpine@latest.cpio \
 	arm32v5-debian@latest.cpio.gz \
 	riscv64-alpine@latest.cpio.gz \
-
+	arm32v5-navikey-raspbian-buster@latest.cpio.gz \
 
 uncompress:
-	gunzip -k arm32v5-debian@latest.cpio.gz
+	gunzip -f -k *.gz
 
 sidecore-images: main.go
 	CGO_ENABLED=0 go build .
@@ -63,4 +63,16 @@ arm32v5-debian@latest.cpio:
 		> $@
 
 arm32v5-debian@latest.cpio.gz: arm32v5-debian@latest.cpio
+	gzip -f $<
+
+arm32v5-navikey-raspbian-buster@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		navikey/raspbian-buster:latest \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
+
+arm32v5-navikey-raspbian-buster@latest.cpio.gz: arm32v5-navikey-raspbian-buster@latest.cpio
 	gzip -f $<

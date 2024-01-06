@@ -1,3 +1,4 @@
 sidecore-images
 arm32v5-debian@latest.cpio
+*.cpio
 *~
