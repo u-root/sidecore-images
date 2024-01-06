@@ -6,6 +6,7 @@ all: sidecore-images \
 	arm32v5-debian@latest.cpio.gz \
 	riscv64-alpine@latest.cpio.gz \
 	arm32v5-navikey-raspbian-buster@latest.cpio.gz \
+	arm32v7-ubuntu@latest.cpio.gz \
 
 uncompress:
 	gunzip -f -k *.gz
@@ -52,6 +53,18 @@ arm32v6-alpine@latest.cpio:
 		/ `pwd`/$@ \
 		-one-file-system  -e /tmp \
 		> $@
+
+arm32v7-ubuntu@latest.cpio:
+	docker run -e PWD=/  \
+		--mount type=bind,source=/home,target=/home \
+		--entrypoint  `pwd`/sidecore-images \
+		arm32v7/ubuntu \
+		/ `pwd`/$@ \
+		-one-file-system  -e /tmp \
+		> $@
+
+arm32v7-ubuntu@latest.cpio.gz: arm32v7-ubuntu@latest.cpio
+	gzip -f $<
 
 arm32v5-debian@latest.cpio:
 	docker run -e PWD=/  \
