@@ -35,7 +35,7 @@ func main() {
 		}
 		log.Printf("%q", n)
 		switch n {
-		case "/home", "/sys", "/dev", "/proc":
+		case "/home", "/sys", "/dev", "/proc", "/root":
 			return fs.SkipDir
 		}
 		return nil
