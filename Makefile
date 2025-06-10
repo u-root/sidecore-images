@@ -31,6 +31,7 @@ riscv64-debian@latest.cpio:
 	docker run -e PWD=/  \
 		--mount type=bind,source=$H,target=$H \
 		--entrypoint  `pwd`/sidecore-images \
+		--platform riscv64 \
 		riscv64/debian:rc-buggy-20240110 \
 		/ `pwd`/$@ \
 		-one-file-system  -e /tmp \
@@ -43,6 +44,7 @@ riscv64-alpine@latest.cpio:
 	docker run -e PWD=/  \
 		--mount type=bind,source=$H,target=$H \
 		--entrypoint  `pwd`/sidecore-images \
+		--platform riscv64 \
 		riscv64/alpine:20230901 \
 		/ `pwd`/$@ \
 		-one-file-system  -e /tmp \
